@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF/Image to JSON OCR</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #1e3c72, #2a5298);
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            margin: 10px;
+        }
+
+        h1 { margin-bottom: 20px; color: #333; }
+
+        input[type="file"] { width: 100%; padding: 10px; margin-bottom: 20px; }
+
+        button {
+            background: #1e88e5;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover { background: #1565c0; }
+
+        .download-btn {
+            margin-top: 15px;
+            display: block;
+            background: #43a047;
+            text-decoration: none;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .download-btn:hover { background: #2e7d32; }
+
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>PDF → JSON OCR</h1>
+
+    <form id="pdfForm" action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit" id="pdfBtn">Upload & Convert PDF</button>
+    </form>
+
+    {% if success and upload_type=='pdf' %}
+        <div class="status success">
+            ✅ PDF Conversion Completed Successfully
+        </div>
+        <a class="download-btn" href="/download/{{ download_file }}">
+            ⬇️ Download JSON File
+        </a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h1>Image → JSON OCR</h1>
+
+    <form id="imageForm" action="/upload_image" method="post" enctype="multipart/form-data">
+        <input type="file" name="image_file" accept="image/*" required>
+        <button type="submit" id="imageBtn">Upload & Convert Image</button>
+    </form>
+
+    {% if success and upload_type=='image' %}
+        <div class="status success">
+            ✅ Image Conversion Completed Successfully
+        </div>
+        <a class="download-btn" href="/download/{{ download_file }}">
+            ⬇️ Download JSON File
+        </a>
+    {% endif %}
+</div>
+
+<script>
+document.getElementById('pdfForm').addEventListener('submit', function() {
+    const btn = document.getElementById('pdfBtn');
+    btn.disabled = true;
+    btn.innerText = 'Converting PDF... ⏳';
+});
+
+document.getElementById('imageForm').addEventListener('submit', function() {
+    const btn = document.getElementById('imageBtn');
+    btn.disabled = true;
+    btn.innerText = 'Converting Image... ⏳';
+});
+</script>
+
+</body>
+</html>
